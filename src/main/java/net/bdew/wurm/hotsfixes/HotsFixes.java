@@ -1,5 +1,6 @@
 package net.bdew.wurm.hotsfixes;
 
+import com.wurmonline.server.Servers;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 public class HotsFixes implements WurmServerMod, Initable, PreInitable, Configurable {
     private static final Logger logger = Logger.getLogger("HotS Fixes");
 
-    private boolean fixMycelium, removeOreCap;
+    private boolean fixMycelium, removeOreCap, disableWallBashing;
     private boolean allowFungus, allowRiteOfDeath;
 
     public static void logException(String msg, Throwable e) {
@@ -45,11 +46,13 @@ public class HotsFixes implements WurmServerMod, Initable, PreInitable, Configur
         removeOreCap = Boolean.parseBoolean(properties.getProperty("removeOreCap"));
         allowFungus = Boolean.parseBoolean(properties.getProperty("allowFungus"));
         allowRiteOfDeath = Boolean.parseBoolean(properties.getProperty("allowRiteOfDeath"));
+        disableWallBashing = Boolean.parseBoolean(properties.getProperty("disableWallBashing"));
 
         logInfo("fixMycelium: " + fixMycelium);
         logInfo("removeOreCap: " + removeOreCap);
         logInfo("allowFungus: " + allowFungus);
         logInfo("allowRiteOfDeath: " + allowRiteOfDeath);
+        logInfo("disableWallBashing: " + disableWallBashing);
     }
 
     @Override
@@ -131,6 +134,19 @@ public class HotsFixes implements WurmServerMod, Initable, PreInitable, Configur
                         }
                     }
                 });
+            }
+
+            if (disableWallBashing){
+                CtClass ctMethodsStructure = classPool.getCtClass("com.wurmonline.server.behaviours.MethodsStructure");
+                ctMethodsStructure.getMethod("checkStructureDestruction", "(Lcom/wurmonline/server/creatures/Creature;Lcom/wurmonline/server/structures/Structure;Lcom/wurmonline/server/zones/VolaTile;)Z")
+                        .instrument(new ExprEditor() {
+                            @Override
+                            public void edit(MethodCall m) throws CannotCompileException {
+                                if (m.getMethodName().equals("getKingdomTemplateId")) {
+                                    m.replace("$_ = com.wurmonline.server.Servers.localServer.PVPSERVER ? $proceed() : 4;");
+                                }
+                            }
+                        });
             }
 
         } catch (Throwable e) {
