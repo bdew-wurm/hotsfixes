@@ -77,7 +77,7 @@ public class HotsFixes implements WurmServerMod, Initable, PreInitable, Configur
                 };
 
                 if (allowFungus) {
-                    for (CtMethod m : classPool.getCtClass("com.wurmonline.server.spells.Fungus").getDeclaredMethods())
+                    for (CtMethod m : classPool.getCtClass("com.wurmonline.server.spells.Corrupt").getDeclaredMethods())
                         m.instrument(spellPveFixer);
                 }
 

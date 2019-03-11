@@ -1,21 +1,23 @@
 apply plugin: 'java'
 
 group "net.bdew.wurm"
-version "0.3-beta16"
+version "0.4-beta19"
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url "http://gotti.no-ip.org/maven/repository" }
 }
 
 dependencies {
-    compile 'org.gotti.wurmunlimited:server-modlauncher:0.33'
+    compile 'org.gotti.wurmunlimited:server-modlauncher:0.42'
+    compile 'org.gotti.wurmunlimited:server:3594125'
+    compile 'org.gotti.wurmunlimited:common:3594125'
 }
 
 jar {
     archiveName "${project.name}.jar"
 }
-
 
 task dist(type: Zip) {
     into("mods", {
@@ -24,6 +26,5 @@ task dist(type: Zip) {
         })
         from fileTree(dir: 'mods', include: '*')
     })
-
     archiveName "${project.name}-${project.version}.zip"
 }
