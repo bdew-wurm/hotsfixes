@@ -1,10 +1,7 @@
 package net.bdew.wurm.hotsfixes;
 
 import com.wurmonline.server.Servers;
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
+import javassist.*;
 import javassist.expr.ExprEditor;
 import javassist.expr.FieldAccess;
 import javassist.expr.MethodCall;
@@ -83,6 +80,8 @@ public class HotsFixes implements WurmServerMod, Initable, PreInitable, Configur
 
                 if (allowRiteOfDeath) {
                     for (CtMethod m : classPool.getCtClass("com.wurmonline.server.spells.RiteDeath").getDeclaredMethods())
+                        m.instrument(spellPveFixer);
+                    for (CtConstructor m : classPool.getCtClass("com.wurmonline.server.spells.RiteDeath").getDeclaredConstructors())
                         m.instrument(spellPveFixer);
                 }
             }

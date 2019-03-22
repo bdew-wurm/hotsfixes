@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group "net.bdew.wurm"
-version "0.4-beta19"
+version "0.4-beta1911"
 
 repositories {
     mavenLocal()
@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.gotti.wurmunlimited:server-modlauncher:0.42'
-    compile 'org.gotti.wurmunlimited:server:3594125'
-    compile 'org.gotti.wurmunlimited:common:3594125'
+    compile 'org.gotti.wurmunlimited:server-modlauncher:0.43-beta1'
+    compile 'org.gotti.wurmunlimited:server:3666039'
+    compile 'org.gotti.wurmunlimited:common:3666039'
 }
 
 jar {
